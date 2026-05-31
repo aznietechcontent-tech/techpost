@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechPost - Portal Berita Teknologi</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen pb-12">
+
+  <nav class="bg-slate-800/80 backdrop-blur border-b border-slate-700 sticky top-0 z-40 p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+        🚀 TECHPOST
+      </h1>
+      <span class="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800 px-3 py-1.5 rounded-full font-mono flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Live
+      </span>
+    </div>
+  </nav>
+
+  <section class="container mx-auto px-4 mt-6">
+    <div class="bg-slate-800 border border-slate-700/60 rounded-2xl p-4 shadow-md flex flex-col md:flex-row gap-4 justify-between items-center">
+      
+      <div id="category-filters" class="flex flex-wrap gap-2 w-full md:w-auto">
+        <button onclick="filterCategory('Semua')" id="btn-Semua" class="text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer bg-cyan-500 text-slate-900 shadow-md shadow-cyan-500/20">
+          Semua
+        </button>
+        <button onclick="filterCategory('Gadget')" id="btn-Gadget" class="text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer bg-slate-700 text-slate-300 hover:bg-slate-600">
+          Gadget
+        </button>
+        <button onclick="filterCategory('Software')" id="btn-Software" class="text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer bg-slate-700 text-slate-300 hover:bg-slate-600">
+          Software
+        </button>
+        <button onclick="filterCategory('AI & Future')" id="btn-AI" class="text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer bg-slate-700 text-slate-300 hover:bg-slate-600">
+          AI & Future
+        </button>
+        <button onclick="filterCategory('Cybersecurity')" id="btn-Cybersecurity" class="text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer bg-slate-700 text-slate-300 hover:bg-slate-600">
+          Cybersecurity
+        </button>
+        <button onclick="filterCategory('Game')" id="btn-Game" class="text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer bg-slate-700 text-slate-300 hover:bg-slate-600">
+          Game
+        </button>
+      </div>
+
+      <div class="w-full md:w-72 relative">
+        <input type="text" id="search-input" oninput="handleSearch()" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-4 pr-10 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition" placeholder="Cari judul atau isi berita...">
+        <span class="absolute right-3 top-3 text-slate-500 text-xs pointer-events-none">🔍</span>
+      </div>
+
+    </div>
+  </section>
+
+  <main class="container mx-auto px-4 mt-6">
+    
+    <div id="loading-status" class="text-center py-20">
+      <p class="text-slate-400 animate-pulse text-lg tracking-wide">Menghubungkan ke database & memuat artikel...</p>
+    </div>
+
+    <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+    </div>
+
+    <div id="load-more-container" class="text-center mt-12 mb-6 hidden">
+      <button onclick="loadMore()" class="bg-slate-800 border border-slate-700 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 font-bold text-sm px-8 py-3.5 rounded-xl cursor-pointer transition shadow-lg inline-flex items-center gap-2">
+        🔄 Muat Lebih Banyak Berita
+      </button>
+    </div>
+
+  </main>
+
+  <div id="article-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl">
+      <img id="modal-img" class="w-full h-64 object-cover" src="" alt="Detail Image">
+      <div class="p-6">
+        <div class="flex gap-2 items-center">
+          <span id="modal-category" class="text-xs font-semibold bg-cyan-950 text-cyan-400 px-2.5 py-1 rounded-md"></span>
+          <span id="modal-date" class="text-xs text-slate-500"></span>
+        </div>
+        <h2 id="modal-title" class="text-2xl font-extrabold mt-3 text-white"></h2>
+        <p id="modal-content" class="text-slate-300 mt-4 leading-relaxed whitespace-pre-wrap"></p>
+        
+        <div class="mt-6 flex justify-between items-center border-t border-slate-700/60 pt-4">
+          <a id="modal-source-link" href="#" target="_blank" class="text-xs text-cyan-400 hover:underline flex items-center gap-1">
+            🌐 Baca Artikel Asli di Sumber Berita
+          </a>
+          
+          <button onclick="closeModal()" class="bg-slate-750 border border-slate-600 hover:bg-slate-700 text-white font-semibold text-sm px-5 py-2 rounded-xl cursor-pointer transition">
+            Tutup
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ PENTING: Jika kamu deploy versi baru di Apps Script, pastikan URL di bawah ini disesuaikan lagi
+    const API_URL = "https://script.google.com/macros/s/AKfycbxDCi_5kRt6_3Ab3c89LorDjv5O1EJaAFyTrxcMc10JD8SnyPYhJDkpIYWcBj6PSc8nTg/exec";
+    
+    let globalArticles = [];      
+    let currentCategory = "Semua"; 
+    let searchQuery = "";         
+    
+    // ✨ VARIABEL TAHAP 4: Mengatur batas jumlah item halaman
+    const ITEMS_PER_PAGE = 6;      // Jumlah artikel yang muncul di awal
+    let currentLimit = ITEMS_PER_PAGE; // Limit dinamis yang akan bertambah tiap tombol diklik
+
+    // 1. Fungsi Pertama Kali Memuat Data dari API
+    async function loadArticles() {
+      const loadingElement = document.getElementById('loading-status');
+      try {
+        const response = await fetch(API_URL);
+        globalArticles = await response.json();
+
+        loadingElement.classList.add('hidden');
+        document.getElementById('articles-grid').classList.remove('hidden');
+        
+        applyFilterAndSearch(); 
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        loadingElement.innerHTML = `<p class="text-red-400 font-semibold">Gagal memuat data dari database.</p>`;
+      }
+    }
+
+    // 2. Fungsi Utama Menyaring Data (Gabungan Kategori + Pencarian + Pagination)
+    function applyFilterAndSearch() {
+      const gridElement = document.getElementById('articles-grid');
+      const loadMoreContainer = document.getElementById('load-more-container');
+      gridElement.innerHTML = ''; 
+
+      // Jalankan penyaringan data kategori & search bar
+      const filtered = globalArticles.filter(art => {
+        const matchCategory = (currentCategory === "Semua" || art.kategori === currentCategory);
+        const textToSearch = (art.judul + " " + art.konten).toLowerCase();
+        const matchSearch = textToSearch.includes(searchQuery.toLowerCase());
+        return matchCategory && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        gridElement.innerHTML = `
+          <div class="text-center py-12 col-span-full">
+            <p class="text-slate-500">Tidak ada artikel teknologi yang cocok dengan pencarianmu.</p>
+          </div>
+        `;
+        loadMoreContainer.classList.add('hidden');
+        return;
+      }
+
+      // ✨ LOGIKA TAHAP 4: Tampilkan tombol Load More HANYA jika artikel sisa masih ada
+      if (filtered.length > currentLimit) {
+        loadMoreContainer.classList.remove('hidden');
+      } else {
+        loadMoreContainer.classList.add('hidden');
+      }
+
+      // ✨ LOGIKA TAHAP 4: Potong array data agar yang dirender hanya sebanyak jumlah limit halaman saat ini
+      const itemsToRender = filtered.slice(0, currentLimit);
+
+      itemsToRender.forEach((art) => {
+        const originalIndex = globalArticles.findIndex(a => a.id === art.id);
+        const fallbackImg = 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500';
+
+        const cardHTML = `
+          <div class="bg-slate-800 rounded-2xl overflow-hidden shadow-md border border-slate-700/50 flex flex-col justify-between transition duration-300 hover:-translate-y-1 hover:shadow-cyan-500/10 hover:border-slate-600 animate-fadeIn">
+            <div>
+              <img class="w-full h-48 object-cover bg-slate-700" src="${art.gambar || fallbackImg}" alt="Cover">
+              <div class="p-5">
+                <span class="text-xs font-semibold bg-cyan-950/80 text-cyan-400 px-2.5 py-1 rounded-md border border-cyan-800/50">
+                  ${art.kategori || 'Umum'}
+                </span>
+                <h2 class="text-xl font-bold mt-3 text-white line-clamp-2">
+                  ${art.judul}
+                </h2>
+                <p class="text-slate-400 text-sm mt-2 line-clamp-3">
+                  ${art.konten}
+                </p>
+              </div>
+            </div>
+            <div class="p-5 pt-0 flex justify-between items-center mt-4">
+              <span class="text-xs text-slate-500">${art.tanggal}</span>
+              <button onclick="openModal(${originalIndex})" class="text-xs font-bold text-cyan-400 hover:text-cyan-300 transition flex items-center gap-1 cursor-pointer">
+                Baca Selengkapnya &rarr;
+              </button>
+            </div>
+          </div>
+        `;
+        gridElement.innerHTML += cardHTML;
+      });
+    }
+
+    // ✨ FUNGSI TAHAP 4: Ketika tombol "Muat Lebih Banyak" diklik
+    function loadMore() {
+      currentLimit += ITEMS_PER_PAGE; // Tambah batas tayang sebanyak 6 item lagi
+      applyFilterAndSearch();         // Render ulang kartu tanpa me-reload browser
+    }
+
+    // 3. Trigger ketika tombol kategori diklik
+    function filterCategory(category) {
+      currentLimit = ITEMS_PER_PAGE; // ✨ TAHAP 4: Reset halaman ke awal saat ganti kategori
+      currentCategory = category;
+      const buttons = document.querySelectorAll('#category-filters button');
+      buttons.forEach(btn => {
+        if (btn.id === `btn-${category.replace(' & ', '')}`) {
+          btn.className = "text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer bg-cyan-500 text-slate-900 shadow-md shadow-cyan-500/20";
+        } else {
+          btn.className = "text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer bg-slate-700 text-slate-300 hover:bg-slate-600";
+        }
+      });
+      applyFilterAndSearch(); 
+    }
+
+    // 4. Trigger setiap kali user mengetik sesuatu di kolom search
+    function handleSearch() {
+      currentLimit = ITEMS_PER_PAGE; // ✨ TAHAP 4: Reset halaman ke awal saat mengetik pencarian baru
+      searchQuery = document.getElementById('search-input').value;
+      applyFilterAndSearch(); 
+    }
+
+    // 5. Logika Modal Konten
+    function openModal(index) {
+      const art = globalArticles[index];
+      const fallbackImg = 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500';
+      
+      document.getElementById('modal-title').innerText = art.judul;
+      document.getElementById('modal-category').innerText = art.kategori || 'Umum';
+      document.getElementById('modal-date').innerText = art.tanggal;
+      document.getElementById('modal-content').innerText = art.konten;
+      document.getElementById('modal-img').src = art.gambar || fallbackImg;
+      
+      const sourceLinkElement = document.getElementById('modal-source-link');
+      if (art.sumber && art.sumber !== "#") {
+        sourceLinkElement.href = art.sumber;
+        sourceLinkElement.classList.remove('hidden');
+      } else {
+        sourceLinkElement.classList.add('hidden'); 
+      }
+      
+      document.getElementById('article-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('article-modal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    window.onload = loadArticles;
+  </script>
+</body>
+</html>
