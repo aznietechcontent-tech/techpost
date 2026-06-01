@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informasi Hukum & Redaksi - TechPost</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen">
+
+  <!-- NAVBAR MINI -->
+  <nav class="bg-slate-800/80 backdrop-blur border-b border-slate-700 p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="index.html" class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent hover:opacity-80 transition">
+        🚀 TECHPOST
+      </a>
+      <a href="index.html" class="text-xs font-bold text-cyan-400 hover:underline">
+        &larr; Kembali ke Beranda
+      </a>
+    </div>
+  </nav>
+
+  <main class="container mx-auto px-4 mt-10 max-w-4xl">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden shadow-xl flex flex-col md:flex-row min-h-[500px]">
+      
+      <!-- SIDEBAR MENU TAB -->
+      <div class="w-full md:w-64 bg-slate-850 border-b md:border-b-0 md:border-r border-slate-700 p-4 flex flex-row md:flex-col gap-2 overflow-x-auto whitespace-nowrap md:whitespace-normal">
+        <button onclick="bukaTab('about')" id="btn-about" class="w-full text-left text-sm font-bold px-4 py-3 rounded-xl transition cursor-pointer bg-cyan-500 text-slate-900 shadow-md">
+          ℹ️ Tentang Kami
+        </button>
+        <button onclick="bukaTab('contact')" id="btn-contact" class="w-full text-left text-sm font-bold px-4 py-3 rounded-xl transition cursor-pointer bg-slate-700 text-slate-300 hover:bg-slate-600">
+          📩 Hubungi Kami
+        </button>
+        <button onclick="bukaTab('privacy')" id="btn-privacy" class="w-full text-left text-sm font-bold px-4 py-3 rounded-xl transition cursor-pointer bg-slate-700 text-slate-300 hover:bg-slate-600">
+          🔒 Kebijakan Privasi
+        </button>
+        <button onclick="bukaTab('disclaimer')" id="btn-disclaimer" class="w-full text-left text-sm font-bold px-4 py-3 rounded-xl transition cursor-pointer bg-slate-700 text-slate-300 hover:bg-slate-600">
+          ⚠️ Disclaimer
+        </button>
+      </div>
+
+      <!-- KONTEN ISI TAB -->
+      <div class="flex-1 p-6 md:p-8 space-y-6 text-slate-300 leading-relaxed text-sm">
+        
+        <!-- TAB: ABOUT -->
+        <div id="content-about" class="tab-content animate-fadeIn">
+          <h2 class="text-2xl font-extrabold text-white mb-4 border-b border-slate-700 pb-2">Tentang TechPost</h2>
+          <p class="mb-4">Selamat datang di <strong>TechPost</strong>, portal berita teknologi masa kini yang dirancang khusus untuk Anda yang dinamis namun tidak ingin ketinggalan tren digital terupdate.</p>
+          <p class="mb-4">TechPost lahir dari sebuah visi modern: menggabungkan kecepatan otomasi Artificial Intelligence (AI) dengan ketajaman informasi yang dibutuhkan manusia. Kami memantau pergerakan teknologi global dari berbagai penjuru dunia secara real-time, merangkumnya menjadi draf informasi yang padat data, kaya angka, dan berdampak nyata bagi masyarakat Indonesia.</p>
+          <p>Kami percaya bahwa informasi teknologi tidak harus rumit dan bertele-tele. Di TechPost, Anda mendapatkan inti fakta tercepat dalam format yang ringkas, jelas, dan siap saji.</p>
+        </div>
+
+        <!-- TAB: CONTACT (HIDDEN) -->
+        <div id="content-contact" class="tab-content hidden animate-fadeIn">
+          <h2 class="text-2xl font-extrabold text-white mb-4 border-b border-slate-700 pb-2">Hubungi Kami</h2>
+          <p class="mb-4">Kami sangat senang mendengar masukan, saran, kritik, atau tawaran kerja sama dari pembaca setia TechPost. Jika Anda memiliki pertanyaan seputar konten kami atau ingin berkolaborasi, jangan ragu untuk menghubungi tim redaksi kami melalui kontak di bawah ini:</p>
+          <ul class="list-disc pl-5 space-y-2 mb-4">
+            <li><strong>Email resmi:</strong> admin@techpost-portal.com</li>
+            <li><strong>Jam Kerja:</strong> Senin - Jumat (09:00 - 17:00 WIB)</li>
+          </ul>
+          <p>Tim kami akan berusaha merespons setiap pesan atau surel yang masuk dalam waktu maksimal 1x24 jam.</p>
+        </div>
+
+        <!-- TAB: PRIVACY (HIDDEN) -->
+        <div id="content-privacy" class="tab-content hidden animate-fadeIn">
+          <h2 class="text-2xl font-extrabold text-white mb-4 border-b border-slate-700 pb-2">Kebijakan Privasi</h2>
+          <p class="mb-4">Di TechPost, privasi pengunjung kami adalah hal yang sangat kami junjung tinggi. Dokumen kebijakan privasi ini menjelaskan jenis informasi pribadi yang diterima, dikumpulkan, dan bagaimana informasi tersebut dikelola oleh sistem kami.</p>
+          <h3 class="text-lg font-bold text-white mt-4 mb-2">Log Files & Data Standar</h3>
+          <p class="mb-4">Seperti situs web pada umumnya, TechPost menggunakan file log. Informasi di dalam file log termasuk alamat protokol internet (IP), jenis browser yang digunakan, Penyedia Layanan Internet (ISP), stempel tanggal/waktu, serta halaman rujukan untuk menganalisis tren dan mengelola situs.</p>
+          <h3 class="text-lg font-bold text-white mt-4 mb-2">Cookies dan Web Beacons (Kebijakan Iklan)</h3>
+          <p class="mb-4">TechPost menggunakan cookies untuk menyimpan informasi tentang preferensi pengunjung. Selain itu, mitra periklanan kami (termasuk namun tidak terbatas pada Google AdSense) dapat menggunakan cookies dan web beacons di situs kami untuk menayangkan iklan yang dipersonalisasi berdasarkan riwayat kunjungan pengguna di internet.</p>
+          <p>Pengguna memiliki kontrol penuh untuk menonaktifkan cookies melalui pengaturan browser masing-masing jika diperlukan.</p>
+        </div>
+
+        <!-- TAB: DISCLAIMER (HIDDEN) -->
+        <div id="content-disclaimer" class="tab-content hidden animate-fadeIn">
+          <h2 class="text-2xl font-extrabold text-white mb-4 border-b border-slate-700 pb-2">Disclaimer</h2>
+          <p class="mb-4">Semua informasi yang diterbitkan di situs web TechPost disediakan dengan niat baik dan hanya ditujukan untuk tujuan informasi umum serta edukasi semata.</p>
+          <p class="mb-4">TechPost tidak memberikan jaminan mutlak tentang kelengkapan, keandalan, dan keakuratan dari informasi pihak ketiga yang dirangkum. Segala tindakan atau keputusan yang Anda ambil atas informasi yang ditemukan di situs ini adalah tanggung jawab Anda sendiri.</p>
+          <p>Melalui situs web kami, Anda dapat mengunjungi situs web lain dengan mengikuti tautan eksternal (Hyperlink) menuju sumber asli berita. Meskipun kami berkomitmen hanya menyertakan tautan yang berkualitas, kami tidak memiliki kendali penuh atas perubahan konten pada situs-situs sumber tersebut.</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function bukaTab(tabName) {
+      // Sembunyikan semua isi konten tab
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => content.classList.add('hidden'));
+
+      // Kembalikan semua tombol ke warna slate (pasif)
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach(btn => {
+        btn.className = "w-full text-left text-sm font-bold px-4 py-3 rounded-xl transition cursor-pointer bg-slate-700 text-slate-300 hover:bg-slate-600";
+      });
+
+      // Tampilkan konten tab yang dipilih
+      document.getElementById('content-' + tabName).classList.remove('hidden');
+
+      // Ubah warna tombol yang aktif menjadi cyan
+      document.getElementById('btn-' + tabName).className = "w-full text-left text-sm font-bold px-4 py-3 rounded-xl transition cursor-pointer bg-cyan-500 text-slate-900 shadow-md";
+    }
+  </script>
+</body>
+</html>
